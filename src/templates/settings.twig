@@ -1,0 +1,19 @@
+{% import '_includes/forms' as forms %}
+
+{{ forms.autosuggestField({
+    label: 'API-sleutel',
+    instructions: 'De sleutel waarmee de Watchdog-server zich aanmeldt. Verwijs bij voorkeur naar een omgevingsvariabele (`$WATCHDOG_KEY`). Minstens ' ~ minLength ~ ' tekens.',
+    name: 'apiKey',
+    value: settings.apiKey,
+    suggestEnvVars: true,
+    warning: overridden ? 'Deze instelling wordt overschreven door `config/watchdog.php`.' : null,
+    errors: settings.getErrors('apiKey'),
+}) }}
+
+<p class="{{ keyOk ? 'light' : 'error' }}">
+    {% if keyOk %}
+        Er is een geldige sleutel ingesteld. De eindpunten staan onder <code>/actions/watchdog/api/</code>.
+    {% else %}
+        Er is geen geldige sleutel ingesteld (leeg, onbekende omgevingsvariabele of korter dan {{ minLength }} tekens). Alle aanvragen worden geweigerd met status 503.
+    {% endif %}
+</p>
